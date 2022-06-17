@@ -1,0 +1,8 @@
+[package]
+distribution = "2201.0.3"
+export = ["reservationsapi"]
+name = "reservationsapi"
+
+
+[build-options]
+observabilityIncluded = true
