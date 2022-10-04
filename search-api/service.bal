@@ -34,22 +34,23 @@ service /search on new http:Listener(9090) {
 
             if inventoryInfo[0].available < numberOfSeats {
                 log:printWarn("unable to find required number of seats", flightNumber = i.flightNumber, flightDate = i.flightDate, requestedSeats = numberOfSeats, availableSeats = inventoryInfo[0].available);
+                // if we had connector call here.
                 continue;
+            } else {
+                faresapi:Fare totalFare = check faresapiEndpoint->getCalculate(i.flightNumber, i.flightDate, numberOfSeats);
+                FlightData data = {
+                    arrivalTime: i.arrivalTime,
+                    totalFare: totalFare.price,
+                    flightDate: i.flightDate,
+                    origin: i.origin,
+                    checkInTime: i.checkInTime,
+                    destination: i.destination,
+                    nummberOfSeats: numberOfSeats,
+                    arrivalDate: i.arrivalDate
+                };
+                flightDataList.push(data);
             }
 
-            faresapi:Fare totalFare = check faresapiEndpoint->getCalculate(i.flightNumber, i.flightDate, numberOfSeats);
-
-            FlightData data = {
-                arrivalTime: i.arrivalTime,
-                totalFare: totalFare.price,
-                flightDate: i.flightDate,
-                origin: i.origin,
-                checkInTime: i.checkInTime,
-                destination: i.destination,
-                nummberOfSeats: numberOfSeats,
-                arrivalDate: i.arrivalDate
-            };
-            flightDataList.push(data);
         }
 
         return flightDataList;
