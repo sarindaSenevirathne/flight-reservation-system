@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Root Directory
+#comment
 cd booking-api
 BASE_FOLDER_NAME="booking-api"
 
